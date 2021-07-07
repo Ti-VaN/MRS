@@ -1,0 +1,459 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{graphicx}
+\graphicspath{C:\Users\ereme\Desktop\LabMod1}
+\author{Тиванов Данил}
+\title{Отчет по лабораторной работе №1}
+\date{\today}
+\DeclareGraphicsExtensions{.pdf, .png, .jpg}
+\begin{document}
+
+\maketitle 
+\section{информация о лабораторной работе}	
+Целью данной лабораторной работы является изучение метода статистических испытаний (метода Монте-Карло). Данные методы - это группа численных методов, основанных на воспроизведении большого числа реализаций одного или нескольких случайных процессов. В общем, суть метода
+заключается в статистическом моделировании случайного процесса, таким
+образом, чем больше испытаний будет проведено, тем точнее получится результат. Основными задачами, решаемыми данными методами, являются:
+1. численное интегрирование
+2. расчеты в системах массового обслуживания
+3. расчет качества и надежности изделий
+4. задачи теории игр
+5. и др
+
+В рамках данной лабораторной работы вы должны выполнить:
+1. Написать алгоритм вычисления площади при помощи метода МонтеКарло;
+(a) Задать квадрат случайной величины;
+(b) Задать произвольную фигуру внутри квадрата (фигуру создавать как минимум с 6-ти углами);
+(c) Провести N испытаний по бросанию точки;
+(d) Подсчитать площадь S1 фигуры внутри по формуле (1);
+(e) Подсчитать площадь S
+theor
+1 фигуры внутри аналитически;
+(f) Найти разницу площадей .
+2. Визуализировать квадрат, фигуру внутри и моделируемые точки (сделать это в виде графика);
+3. Вывести график зависимости погрешности вычислений от количества испытаний N (10 испытаний, 50 испытаний, 100, 1000, и т.д.);
+4. Написать отчет.
+
+\section{Результаты лабораторной работы}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{LabMod1/Screenshot_1}
+	\caption{}
+	\label{fig:screenshot1}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{LabMod1/Screenshot_2}
+	\caption{}
+	\label{fig:screenshot2}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{LabMod1/Screenshot_3}
+	\caption{}
+	\label{fig:screenshot3}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{LabMod1/Screenshot_4}
+	\caption{}
+	\label{fig:screenshot4}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{LabMod1/Screenshot_5}
+	\caption{}
+	\label{fig:screenshot5}
+\end{figure}
+\begin{verbatim}
+#include <iostream>
+#include <math.h>
+#pragma once
+
+namespace LabModelir1 {
+	
+	using namespace System;
+	using namespace System::ComponentModel;
+	using namespace System::Collections;
+	using namespace System::Windows::Forms;
+	using namespace System::Data;
+	using namespace System::Drawing;
+	
+	/// <summary>
+	/// Сводка для MyForm
+	/// </summary>
+	public ref class MyForm : public System::Windows::Forms::Form
+	{
+		public:
+		MyForm(void)
+		{
+			InitializeComponent();
+			//
+			//TODO: добавьте код конструктора
+			//
+		}
+		
+		protected:
+		/// <summary>
+		/// Освободить все используемые ресурсы.
+		/// </summary>
+		~MyForm()
+		{
+			if (components)
+			{
+				delete components;
+			}
+		}
+		private: System::Windows::Forms::Button^ button1;
+		protected:
+		private: System::Windows::Forms::Button^ button2;
+		private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel1;
+		private: System::Windows::Forms::PictureBox^ pictureBox1;
+		
+		
+		private: System::Windows::Forms::Label^ label1;
+		private: System::Windows::Forms::Label^ label2;
+		private: System::Windows::Forms::Label^ label3;
+		private: System::Windows::Forms::Label^ label4;
+		
+		
+		private: System::Windows::Forms::Button^ button3;
+		private: System::Windows::Forms::TextBox^ textBox4;
+		private: System::Windows::Forms::TextBox^ textBox3;
+		private: System::Windows::Forms::TextBox^ textBox2;
+		private: System::Windows::Forms::TextBox^ textBox1;
+		
+		
+		protected:
+		
+		
+		
+		
+		
+		
+		
+		
+		protected:
+		
+		
+		
+		protected:
+		
+		
+		protected:
+		
+		private:
+		/// <summary>
+		/// Обязательная переменная конструктора.
+		/// </summary>
+		System::ComponentModel::Container^ components;
+		
+		#pragma region Windows Form Designer generated code
+		/// <summary>
+		/// Требуемый метод для поддержки конструктора — не изменяйте 
+		/// содержимое этого метода с помощью редактора кода.
+		/// </summary>
+		void InitializeComponent(void)
+		{
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->tableLayoutPanel1 = (gcnew System::Windows::Forms::TableLayoutPanel());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->tableLayoutPanel1->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
+			this->SuspendLayout();
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(604, 41);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(153, 23);
+			this->button1->TabIndex = 0;
+			this->button1->Text = L"Фигура";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(604, 70);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(153, 23);
+			this->button2->TabIndex = 0;
+			this->button2->Text = L"Точки";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
+			// 
+			// tableLayoutPanel1
+			// 
+			this->tableLayoutPanel1->ColumnCount = 1;
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+			100)));
+			this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
+			20)));
+			this->tableLayoutPanel1->Controls->Add(this->pictureBox1, 0, 0);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(1, 2);
+			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
+			this->tableLayoutPanel1->RowCount = 1;
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 600)));
+			this->tableLayoutPanel1->Size = System::Drawing::Size(600, 600);
+			this->tableLayoutPanel1->TabIndex = 1;
+			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->pictureBox1->Location = System::Drawing::Point(3, 3);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(594, 594);
+			this->pictureBox1->TabIndex = 0;
+			this->pictureBox1->TabStop = false;
+			// 
+			// label1
+			// 
+			this->label1->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(635, 337);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(60, 13);
+			this->label1->TabIndex = 4;
+			this->label1->Text = L"Введите N";
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(635, 452);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(88, 13);
+			this->label2->TabIndex = 4;
+			this->label2->Text = L"S Аналитически";
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(635, 398);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(83, 13);
+			this->label3->TabIndex = 5;
+			this->label3->Text = L"S Практически";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(635, 513);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(104, 13);
+			this->label4->TabIndex = 6;
+			this->label4->Text = L"Разница площадей";
+			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(604, 99);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(153, 23);
+			this->button3->TabIndex = 7;
+			this->button3->Text = L"График";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			// 
+			// textBox4
+			// 
+			this->textBox4->Location = System::Drawing::Point(604, 529);
+			this->textBox4->Name = L"textBox4";
+			this->textBox4->Size = System::Drawing::Size(153, 20);
+			this->textBox4->TabIndex = 3;
+			this->textBox4->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox4_TextChanged);
+			// 
+			// textBox3
+			// 
+			this->textBox3->Location = System::Drawing::Point(604, 468);
+			this->textBox3->Name = L"textBox3";
+			this->textBox3->Size = System::Drawing::Size(153, 20);
+			this->textBox3->TabIndex = 3;
+			this->textBox3->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox3_TextChanged);
+			// 
+			// textBox2
+			// 
+			this->textBox2->Location = System::Drawing::Point(604, 414);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(153, 20);
+			this->textBox2->TabIndex = 3;
+			this->textBox2->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox2_TextChanged);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(604, 353);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(153, 20);
+			this->textBox1->TabIndex = 2;
+			this->textBox1->Text = L"10";
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox1_TextChanged);
+			// 
+			// MyForm
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->ClientSize = System::Drawing::Size(759, 611);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->label1);
+			this->Controls->Add(this->textBox4);
+			this->Controls->Add(this->textBox3);
+			this->Controls->Add(this->textBox2);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->tableLayoutPanel1);
+			this->Controls->Add(this->button2);
+			this->Controls->Add(this->button1);
+			this->Name = L"MyForm";
+			this->Text = L"MyForm";
+			this->tableLayoutPanel1->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
+			this->ResumeLayout(false);
+			this->PerformLayout();
+			
+		}
+		#pragma endregion
+		private: System::Void Dr0w() {
+			int pw = pictureBox1->Width, ph = pictureBox1->Height;
+			Bitmap^ bmp = gcnew Bitmap(pw, ph);
+			Graphics^ graph = Graphics::FromImage(bmp);
+			graph->DrawRectangle(Pens::Black, 10, 10, 550, 550);
+			graph->DrawLine(Pens::Blue, 60, 50, 30, 200);
+			graph->DrawLine(Pens::Blue, 30, 200, 150, 440);
+			graph->DrawLine(Pens::Blue, 150, 440, 322, 512);
+			graph->DrawLine(Pens::Blue, 322, 512, 520, 390);
+			graph->DrawLine(Pens::Blue, 520, 390, 490, 100);
+			graph->DrawLine(Pens::Blue, 490, 100, 60, 50);
+			this->pictureBox1->Image = bmp;
+		}
+		
+		private: int Pl0shad3(int x1, int y1, int x2, int y2, int x3, int y3) {
+			long long Str = 1;
+			Str = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
+			return Str;
+		}
+		//   180, 150, 150, 440, 322, 512
+		private: int Pl0shad6(int x, int y) {
+			long long Ssh = 0;
+			Ssh += Pl0shad3(x, y, 60, 50, 30, 200);
+			Ssh += Pl0shad3(x, y, 30, 200, 150, 440);
+			Ssh += Pl0shad3(x, y, 150, 440, 322, 512);
+			Ssh += Pl0shad3(x, y, 322, 512, 520, 390);
+			Ssh += Pl0shad3(x, y, 520, 390, 490, 100);
+			Ssh += Pl0shad3(x, y, 490, 100, 60, 50);
+			return Ssh;
+		}
+		
+		private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+			Dr0w();
+		}
+		
+		public:	  long long Area_Theoretically;
+		public:	  double Formula_Error;
+		public:   long long Amount_Of_Points;
+		public:   long long Figure_Area ;
+		public:	  long long Square_Area = 540 * 540;
+		public:	  long long Area_Difference;
+		
+		private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+			int N = int::Parse(textBox1->Text);
+			int pw = pictureBox1->Width, ph = pictureBox1->Height;
+			Bitmap^ bmp = gcnew Bitmap(pw, ph);
+			Graphics^ graph = Graphics::FromImage(bmp);
+			graph->DrawRectangle(Pens::Black, 10, 10, 550, 550);
+			graph->DrawLine(Pens::Blue, 60, 50, 30, 200);
+			graph->DrawLine(Pens::Blue, 30, 200, 150, 440);
+			graph->DrawLine(Pens::Blue, 150, 440, 322, 512);
+			graph->DrawLine(Pens::Blue, 322, 512, 520, 390);
+			graph->DrawLine(Pens::Blue, 520, 390, 490, 100);
+			graph->DrawLine(Pens::Blue, 490, 100, 60, 50);
+			textBox2->Clear();
+			textBox3->Clear();
+			textBox4->Clear();
+			this->pictureBox1->Image = bmp;
+			
+			Figure_Area = Pl0shad6(200, 225);
+			textBox3->Text += Convert::ToString(Figure_Area);
+			Amount_Of_Points = 0;
+			for (int i = 0; i < N; i++) {
+				int rnd1, rnd2;
+				rnd1 = rand() % 550 + 10;
+				rnd2 = rand() % 550 + 10;
+				if (Figure_Area == Pl0shad6(rnd1, rnd2)) Amount_Of_Points++;
+				graph->DrawRectangle(Pens::Red, rnd1, rnd2, 1, 1);
+			}
+			Area_Theoretically = Amount_Of_Points * Square_Area / N;
+			textBox2->Text += Convert::ToString(Area_Theoretically);
+			Area_Difference = abs(Area_Theoretically - Figure_Area);
+			textBox4->Text += Convert::ToString(Area_Difference);
+		}
+		
+		public: delegate double DelegatePtr(double); 
+		private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+			int pW = pictureBox1->Width, pH = pictureBox1->Height;
+			Bitmap^ img = gcnew Bitmap(pW, pH);
+			Graphics^ g = Graphics::FromImage(img);
+			int mX = int(pW / 2 - pW / 2 % 1);
+			int mY = int(pH / 2 - pH / 2 % 1);
+			g->DrawLine(Pens::Red, mX, 0, mX, pH);
+			g->DrawLine(Pens::Red, 0, mY, pW, mY);
+			g->ScaleTransform(1, -1);
+			g->TranslateTransform((float)mX, -(float)mY); 
+			
+			double y; double x; double ctp;
+			
+			System::Collections::Generic::List<PointF>^ Points =	
+			gcnew System::Collections::Generic::List<PointF>(); 
+			textBox4->Clear();
+			for (int N = 10; N < 1000; N ++ ) {	
+				x = N;
+				Area_Theoretically = Amount_Of_Points * Square_Area / N;
+				Area_Difference = abs(Area_Theoretically - Figure_Area);
+				ctp = Area_Difference;
+				ctp /= Square_Area;
+				y = ctp*100;	
+				Points->Add(PointF(x , y ));
+				
+			}
+			
+			g->DrawLines(Pens::Green, Points->ToArray()); 
+			this->pictureBox1->Image = img; 
+		}
+		
+		private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+		}
+		private: System::Void textBox2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+		}
+		private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+		}
+		private: System::Void textBox4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+		}
+	};
+}
+\end{verbatim}
+
+\section{Содержание}
+	1. Информация о лабораторной работе
+	2. Результаты лабораторной работы
+	(a) График фигуры до моделирования точек и после 
+	(b) График зависимости погрешности вычислений от количества
+	испытаний N
+	(c) Вывод по лабораторной работе
+	(d) Код программы
+	3. Содержание
+\tableofcontents
+	
+\clearpage
+\end{document}
